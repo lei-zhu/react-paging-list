@@ -9,14 +9,14 @@ export interface IListItem {
 }
 
 export interface IListViewProps<T> {
-  pageNumber: Number; // 当前页
-  pageSize: Number; // 每页记录数
-  dataLoading: Boolean; // 数据加载中
+  pageNumber: number; // 当前页
+  pageSize: number; // 每页记录数
+  dataLoading: boolean; // 数据加载中
   dataListPerPage: Array<T>; // 每页数据集
-  totalCount: Number; // 总记录数
+  totalCount: number; // 总记录数
+  firstLoadingText: string; // 第一次加载时显示的文本
+  listEmptyText: string; // 列表为空时显示的文本
   renderItem: Function; // 渲染每一项的回调函数
-  firstLoadingText: String; // 第一次加载时显示的文本
-  listEmptyText: String; // 列表为空时显示的文本
 }
 
 export interface IListViewState<T> {

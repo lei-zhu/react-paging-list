@@ -2,33 +2,49 @@ import React from 'react';
 import './style.less';
 
 export interface ILoadMoreProps {
-  pageNumber: Number; // 当前页
-  totalPages: Number; // 总页数
-  dataLoading: Boolean; // 数据加载中
-  loadingText?: String; // 加载时显示的文本
-  loadBtnText?: String; // 加载下一页按钮的文本
-  noMoreText?: String; // 所有页数据均已加载的提示文本
+  pageNumber: number; // 当前页
+  pageSize: number; // 每页记录数
+  dataLoading: boolean; // 数据加载中
+  totalCount: number; // 总记录数
+  loadingText?: string; // 加载时显示的文本
+  loadBtnText?: string; // 加载下一页按钮的文本
+  noMoreText?: string; // 所有页数据均已加载的提示文本
   onLoadBtnClick: Function; // 加载下一页按钮的回调函数
 }
 
 const LoadMore: React.FC<ILoadMoreProps> = (props: ILoadMoreProps) => {
   const {
-    pageNumber, totalPages, dataLoading,
+    pageNumber, pageSize, dataLoading, totalCount,
     loadingText, loadBtnText, noMoreText,
     onLoadBtnClick,
   } = props;
 
-  let content;
+  const totalPages = Math.floor((totalCount % pageSize === 0)
+    ? (totalCount / pageSize)
+    : (totalCount / pageSize + 1));
 
+  let content;
   if (dataLoading === true) {
-    content = (
-      <div className="load_status_text">
-        <span>{loadingText}</span>
+    return (
+      <div className="rpl_load_more">
+        <div className="load_status_text">
+          <span>{loadingText}</span>
+        </div>
       </div>
     );
   }
 
-  if (dataLoading === false && pageNumber < totalPages) {
+  if (dataLoading === false && totalCount === 0) {
+    return (
+      <div className="rpl_load_more">
+        <></>
+      </div>
+    );
+  }
+
+  if (dataLoading === false
+    && totalCount > 0
+    && pageNumber < totalPages) {
     content = (
       <div
         className="load_btn"

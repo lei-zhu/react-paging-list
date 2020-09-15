@@ -8,8 +8,6 @@ export default class App extends PureComponent {
   render() {
     return (
       <div className="app">
-        hello world
-        <br />
         <ListView
           pageNumber={1}
           pageSize={10}
@@ -18,11 +16,12 @@ export default class App extends PureComponent {
           totalCount={0}
           renderItem={() => {}}
           firstLoadingText="正在努力加载哟"
-          listEmptyText="唉哟，什么都没有嘢"
+          listEmptyText="矮油，什么都没有耶"
         />
         <LoadMore
           pageNumber={1}
-          totalPages={2}
+          pageSize={10}
+          totalCount={0}
           dataLoading={false}
           onLoadBtnClick={() => {}}
         />
