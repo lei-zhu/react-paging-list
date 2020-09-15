@@ -36,7 +36,18 @@ module.exports = {
         ],
       },
       {
-        test: /\.css$/i,
+        test: /\.(png|jpg|gif|svg)$/i,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 8192,
+            },
+          },
+        ],
+      },
+      {
+        test: /\.css$/,
         use: [
           { loader: 'style-loader' },
           { loader: 'css-loader' },
@@ -48,25 +59,6 @@ module.exports = {
           { loader: 'style-loader' },
           { loader: 'css-loader' },
           { loader: 'less-loader' },
-        ],
-      },
-      {
-        test: /\.s[ac]ss$/i,
-        use: [
-          { loader: 'style-loader' },
-          { loader: 'css-loader' },
-          { loader: 'sass-loader' },
-        ],
-      },
-      {
-        test: /\.(png|jpg|gif)$/i,
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              limit: 8192,
-            },
-          },
         ],
       },
     ],

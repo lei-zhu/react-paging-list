@@ -1,0 +1,30 @@
+@import './../index.less';
+
+.rpl_list_view:extend(.flex_column) {
+
+  & > .list_item:extend(.flex_column) {
+    min-height: 30px;
+    width: 100%;
+  }
+
+  & > .list_nothing:extend(.flex_column_center),
+  & > .list_loading:extend(.flex_column_center) {
+    height: 300px;
+
+    & > img {
+      width: 70px;
+    }
+
+    & > span {
+      color: #838383;
+      font-size: 14px;
+      letter-spacing: 1px;
+    }
+  }
+
+  & > .list_loading {
+    & > span {
+      color: #1890ff;
+    }
+  }
+}
