@@ -5,7 +5,7 @@ import SVG_CAT from '../../assets/cat.svg';
 import SVG_PANDA from '../../assets/panda.svg';
 
 export interface IListItem {
-  id: string | number | null | undefined;
+  id: any;
 }
 
 export interface IListViewProps<T> {
@@ -34,7 +34,7 @@ class ListView<T extends IListItem> extends PureComponent<IListViewProps<T>, ILi
     };
   }
 
-  static getDerivedStateFromProps(props, state) {
+  static getDerivedStateFromProps(props: any, state: any) {
     const {
       pageNumber, pageSize,
       dataLoading, dataListPerPage,

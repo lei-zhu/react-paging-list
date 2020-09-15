@@ -14,8 +14,8 @@ export default class App extends PureComponent {
           pageNumber={1}
           pageSize={10}
           dataLoading={false}
-          dataListPerPage={[1,2,3,4,5]}
-          totalCount={5}
+          dataListPerPage={[]}
+          totalCount={0}
           renderItem={() => {}}
           firstLoadingText="正在努力加载哟"
           listEmptyText="唉哟，什么都没有嘢"
