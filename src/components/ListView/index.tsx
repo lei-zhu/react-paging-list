@@ -4,18 +4,18 @@ import './style.less';
 import SVG_CAT from '../../assets/cat.svg';
 import SVG_PANDA from '../../assets/panda.svg';
 
-export interface IListItem {
-  id: any;
+export interface IListViewOptions {
+  firstLoadingText?: string; // 第一次加载时显示的文本
+  listEmptyText?: string; // 列表为空时显示的文本
 }
 
 export interface IListViewProps<T> {
-  pageNumber: number; // 当前页
-  pageSize: number; // 每页记录数
+  pageNumber: number; // 当前页码
+  pageSize: number; // 每页数量
   dataLoading: boolean; // 数据加载中
   dataListPerPage: Array<T>; // 每页数据集
   totalCount: number; // 总记录数
-  firstLoadingText: string; // 第一次加载时显示的文本
-  listEmptyText: string; // 列表为空时显示的文本
+  options: IListViewOptions;
   renderItem: Function; // 渲染每一项的回调函数
 }
 
@@ -24,7 +24,7 @@ export interface IListViewState<T> {
   totalPages: Number; // 总页数
 }
 
-class ListView<T extends IListItem> extends PureComponent<IListViewProps<T>, IListViewState<T>> {
+class ListView<T> extends PureComponent<IListViewProps<T>, IListViewState<T>> {
   constructor(props: IListViewProps<T>) {
     super(props);
 
@@ -78,19 +78,9 @@ class ListView<T extends IListItem> extends PureComponent<IListViewProps<T>, ILi
     return null;
   }
 
-  renderListItem = (item: T) => {
-    const { id } = item;
-    const { renderItem } = this.props;
-
-    return (
-      <div key={id} className="list_item">
-        {renderItem()}
-      </div>
-    );
-  }
-
   renderFirstLoading = () => {
-    const { firstLoadingText } = this.props;
+    const { options } = this.props;
+    const { firstLoadingText } = options;
     return (
       <div className="list_loading">
         <img src={SVG_PANDA} alt="" />
@@ -101,7 +91,8 @@ class ListView<T extends IListItem> extends PureComponent<IListViewProps<T>, ILi
   }
 
   renderListNothing = () => {
-    const { listEmptyText } = this.props;
+    const { options } = this.props;
+    const { listEmptyText } = options;
     return (
       <div className="list_nothing">
         <img src={SVG_CAT} alt="" />
@@ -113,6 +104,7 @@ class ListView<T extends IListItem> extends PureComponent<IListViewProps<T>, ILi
 
   render() {
     const { totalPages, dataList } = this.state;
+    const { dataLoading, renderItem } = this.props;
 
     if (totalPages === -1) {
       return (
@@ -122,7 +114,7 @@ class ListView<T extends IListItem> extends PureComponent<IListViewProps<T>, ILi
       );
     }
 
-    if (totalPages === 0) {
+    if (totalPages === 0 && dataLoading === false) {
       return (
         <div className="rpl_list_view">
           {this.renderListNothing()}
@@ -130,7 +122,7 @@ class ListView<T extends IListItem> extends PureComponent<IListViewProps<T>, ILi
       );
     }
 
-    const content = dataList.map((item: T) => this.renderListItem(item));
+    const content = dataList.map((item: T) => renderItem(item));
     return (
       <div className="rpl_list_view">
         {content}

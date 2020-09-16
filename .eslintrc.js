@@ -29,6 +29,8 @@ module.exports = {
     'no-use-before-define': [0],
     '@typescript-eslint/no-use-before-define': [1],
     'import/extensions': 'off',
+    'no-unused-vars': ['error', { vars: 'all', args: 'none', ignoreRestSiblings: false }],
+    'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
   },
   settings: {
     'import/resolver': {

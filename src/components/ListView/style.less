@@ -1,6 +1,10 @@
 @import './../index.less';
 
-.rpl_list_view:extend(.flex_column) {
+.rpl_list_view:extend(.flex_column_center) {
+  align-items: unset;
+  height: 100%;
+  width: 100%;
+  overflow-y: scroll;
 
   & > .list_item:extend(.flex_column) {
     min-height: 30px;
@@ -9,8 +13,7 @@
 
   & > .list_nothing:extend(.flex_column_center),
   & > .list_loading:extend(.flex_column_center) {
-    height: 300px;
-
+    
     & > img {
       width: 70px;
     }

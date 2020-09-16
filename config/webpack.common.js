@@ -12,7 +12,7 @@ module.exports = {
   },
   output: {
     path: path.join(__dirname, './../', 'dist'),
-    filename: '[name].[contentHash].bundle.js',
+    filename: '[name].[hash].bundle.js',
   },
   module: {
     rules: [
