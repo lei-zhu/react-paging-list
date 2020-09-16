@@ -1,0 +1,26 @@
+@import './../index.less';
+
+.rpl_load_more:extend(.flex_column_center) {
+  height: 60px;
+  width: 100%;
+
+  & > .load_status_text {
+    & > span {
+      color: #848484;
+      font-size: 16px;
+    }
+  }
+
+  & > .load_btn:extend(.flex_column_center) {
+    width: 30%;
+    height: 30px;
+    border: 1px solid #1890ff;
+    border-radius: 4px;
+
+    & > span {
+      color: #1890ff;
+      font-size: 14px;
+      letter-spacing: 1px;
+    }
+  }
+}

@@ -12,7 +12,7 @@ module.exports = {
   },
   output: {
     path: path.join(__dirname, './../', 'dist'),
-    filename: '[name].[contentHash].bundle.js',
+    filename: '[name].[hash].bundle.js',
   },
   module: {
     rules: [
@@ -36,15 +36,7 @@ module.exports = {
         ],
       },
       {
-        test: /\.less$/,
-        use: [
-          { loader: 'style-loader' },
-          { loader: 'css-loader' },
-          { loader: 'less-loader' },
-        ],
-      },
-      {
-        test: /\.(png|jpg|gif)$/i,
+        test: /\.(png|jpg|gif|svg)$/i,
         use: [
           {
             loader: 'url-loader',
@@ -52,6 +44,21 @@ module.exports = {
               limit: 8192,
             },
           },
+        ],
+      },
+      {
+        test: /\.css$/,
+        use: [
+          { loader: 'style-loader' },
+          { loader: 'css-loader' },
+        ],
+      },
+      {
+        test: /\.less$/,
+        use: [
+          { loader: 'style-loader' },
+          { loader: 'css-loader' },
+          { loader: 'less-loader' },
         ],
       },
     ],
