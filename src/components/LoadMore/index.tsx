@@ -9,23 +9,19 @@ export interface ILoadMoreOptions {
 
 export interface ILoadMoreProps {
   pageNumber: number; // 当前页码
-  pageSize: number; // 每页数量
   dataLoading: boolean; // 数据加载中
   totalCount: number; // 总记录数
+  totalPages: number; // 总页数
   options: ILoadMoreOptions;
   onLoadBtnClick: Function; // 加载下一页按钮的回调函数
 }
 
 const LoadMore: React.FC<ILoadMoreProps> = (props: ILoadMoreProps) => {
   const {
-    pageNumber, pageSize, dataLoading, totalCount,
+    pageNumber, dataLoading, totalCount, totalPages,
     options, onLoadBtnClick,
   } = props;
   const { loadingText, loadBtnText, noMoreText } = options;
-
-  const totalPages = Math.floor((totalCount % pageSize === 0)
-    ? (totalCount / pageSize)
-    : (totalCount / pageSize + 1));
 
   if ((dataLoading === false && pageNumber === 1 && totalCount === 0 && totalPages === 0)
     || (dataLoading === true && pageNumber === 1 && totalCount === 0)) {
