@@ -10,6 +10,7 @@ export interface IListViewOptions {
 }
 
 export interface IListViewProps<T> {
+  layoutType: string; // 布局类型，可选值: ROW, GRID
   pageNumber: number; // 当前页码
   pageSize: number; // 每页数量
   dataLoading: boolean; // 数据加载中
@@ -104,11 +105,11 @@ class ListView<T> extends PureComponent<IListViewProps<T>, IListViewState<T>> {
 
   render() {
     const { totalPages, dataList } = this.state;
-    const { dataLoading, renderItem } = this.props;
+    const { layoutType, dataLoading, renderItem } = this.props;
 
     if (totalPages === -1) {
       return (
-        <div className="rpl_list_view">
+        <div className="rpl_list_view_2">
           {this.renderFirstLoading()}
         </div>
       );
@@ -116,8 +117,17 @@ class ListView<T> extends PureComponent<IListViewProps<T>, IListViewState<T>> {
 
     if (totalPages === 0 && dataLoading === false) {
       return (
-        <div className="rpl_list_view">
+        <div className="rpl_list_view_2">
           {this.renderListNothing()}
+        </div>
+      );
+    }
+
+    if (layoutType === 'GRID') {
+      const content = dataList.map((item: T) => renderItem(item));
+      return (
+        <div className="rpl_list_view grid_layout">
+          {content}
         </div>
       );
     }

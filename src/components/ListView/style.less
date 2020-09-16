@@ -2,18 +2,58 @@
 
 .rpl_list_view:extend(.flex_column_center) {
   align-items: unset;
-  height: 100%;
   width: 100%;
-  overflow-y: scroll;
+  padding: 0 2%;
 
   & > .list_item:extend(.flex_column) {
     min-height: 30px;
     width: 100%;
+  }  
+}
+
+.rpl_list_view.grid_layout:extend(.flex_row_wrap) {
+  justify-content: space-around;
+  padding: 0 1%;
+
+  & > .list_item:extend(.flex_column) {
+    min-height: 30px;
+    width: 47%;
   }
+
+  & > .list_item.center {
+    justify-content: center;
+    align-items: center;
+  }
+
+  & > .list_item.border {
+    border: 1px solid #e3e3e3;
+    border-radius: 4px;
+  }
+}
+
+.rpl_list_view, 
+.rpl_list_view.grid_layout {
+  box-sizing: border-box;
+
+  & > .list_item {
+    box-sizing: border-box;
+    margin-top: 2%;
+  }
+  & > .list_item.center {
+    justify-content: center;
+    align-items: center;
+  }
+  & > .list_item.border {
+    border: 1px solid #e3e3e3;
+    border-radius: 4px;
+  }
+}
+
+.rpl_list_view_2:extend(.flex_column_center) {
+  height: 100%;
 
   & > .list_nothing:extend(.flex_column_center),
   & > .list_loading:extend(.flex_column_center) {
-    
     & > img {
       width: 70px;
     }

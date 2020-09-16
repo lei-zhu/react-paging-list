@@ -23,7 +23,7 @@ export default class App extends PureComponent {
     const { pageNumber, pageSize } = params;
 
     const dataList: Array<IDataObj> = [];
-    for (let i = 1; i <= 10; i++) {
+    for (let i = 1; i <= 20; i++) {
       const newItem = { ...item };
 
       const id = `${item.id}-${pageNumber}-${pageSize}-${i}`;
@@ -33,7 +33,7 @@ export default class App extends PureComponent {
     }
 
     const result: IPagedResult = {
-      total: 68,
+      total: 60,
       dataList,
     };
 
@@ -44,23 +44,24 @@ export default class App extends PureComponent {
     return (
       <div className="app">
         <PagingList
-          pageSize={10}
+          layoutType="GRID"
+          pageSize={20}
           requestData={this.requestData}
           renderItem={(item: IDataObj) => {
             const {
               id, name, age, birthday,
             } = item;
             return (
-              <div key={item.id} className="list_item">
+              <div key={item.id} className="list_item center border">
                 <div>{id}</div>
                 <div>{name}</div>
                 <div>{age}</div>
                 <div>{birthday}</div>
-                <br />
-                <br />
               </div>
             );
           }}
+          enableScrollingAutoLoad
+          distanceHeightFromBottom={320}
         />
       </div>
     );
