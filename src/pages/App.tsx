@@ -33,7 +33,7 @@ export default class App extends PureComponent {
     }
 
     const result: IPagedResult = {
-      total: 68,
+      total: 56,
       dataList,
     };
 
@@ -44,6 +44,7 @@ export default class App extends PureComponent {
     return (
       <div className="app">
         <PagingList
+          // layoutType="GRID"
           pageSize={10}
           requestData={this.requestData}
           renderItem={(item: IDataObj) => {
@@ -51,13 +52,11 @@ export default class App extends PureComponent {
               id, name, age, birthday,
             } = item;
             return (
-              <div key={item.id} className="list_item">
+              <div key={item.id} className="list_item center border">
                 <div>{id}</div>
                 <div>{name}</div>
                 <div>{age}</div>
                 <div>{birthday}</div>
-                <br />
-                <br />
               </div>
             );
           }}

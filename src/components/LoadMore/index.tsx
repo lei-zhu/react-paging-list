@@ -27,7 +27,8 @@ const LoadMore: React.FC<ILoadMoreProps> = (props: ILoadMoreProps) => {
     ? (totalCount / pageSize)
     : (totalCount / pageSize + 1));
 
-  if (dataLoading === true && pageNumber === 1 && totalCount === 0) {
+  if ((dataLoading === false && pageNumber === 1 && totalCount === 0 && totalPages === 0)
+    || (dataLoading === true && pageNumber === 1 && totalCount === 0)) {
     return (
       <div className="rpl_load_more">
         <></>

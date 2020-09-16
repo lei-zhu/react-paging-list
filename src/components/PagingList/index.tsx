@@ -15,6 +15,7 @@ export interface IPagedResult {
 }
 
 export interface IPagingListProps {
+  layoutType?: string; // 布局类型，可选值: ROW, GRID
   pageSize: number; // 每页数量
   requestData: (params: IPageRequestParams) => IPagedResult; // 请求页面数据的回调函数
   renderItem: (item: any) => React.ReactNode; // 渲染列表项的回调函数
@@ -24,7 +25,7 @@ export interface IPagingListProps {
 
 const PagingList: React.FC<IPagingListProps> = (props: IPagingListProps) => {
   const {
-    pageSize, requestData, renderItem,
+    layoutType, pageSize, requestData, renderItem,
     listViewOptions, loadMoreOptions,
   } = props;
 
@@ -61,16 +62,17 @@ const PagingList: React.FC<IPagingListProps> = (props: IPagingListProps) => {
   return (
     <div className="paging_list">
       <ListView
+        layoutType={layoutType ?? 'ROW'}
         pageNumber={pageNum}
         pageSize={pageSize}
         dataLoading={dataLoading}
         dataListPerPage={dataListPerPage}
         totalCount={totalCount}
-        renderItem={renderItem}
         options={{
           firstLoadingText: listViewOptions?.firstLoadingText,
           listEmptyText: listViewOptions?.listEmptyText,
         }}
+        renderItem={renderItem}
       />
       <LoadMore
         pageNumber={pageNum}
@@ -91,6 +93,7 @@ const PagingList: React.FC<IPagingListProps> = (props: IPagingListProps) => {
 };
 
 PagingList.defaultProps = {
+  layoutType: 'ROW',
   pageSize: 10,
   listViewOptions: {
     firstLoadingText: '正在努力加载哟',
