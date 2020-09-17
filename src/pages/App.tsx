@@ -23,7 +23,7 @@ export default class App extends PureComponent {
     const { pageNumber, pageSize } = params;
 
     const dataList: Array<IDataObj> = [];
-    for (let i = 1; i <= 5; i++) {
+    for (let i = 1; i <= 19; i++) {
       const newItem = { ...item };
 
       const id = `${item.id}-${pageNumber}-${pageSize}-${i}`;
@@ -33,7 +33,7 @@ export default class App extends PureComponent {
     }
 
     const result: IPagedResult = {
-      total: 5,
+      total: 190,
       dataList,
     };
 
@@ -45,7 +45,7 @@ export default class App extends PureComponent {
       <div className="app">
         <PagingList
           layoutType="GRID"
-          pageSize={5}
+          pageSize={19}
           requestData={this.requestData}
           renderItem={(item: IDataObj) => {
             const {

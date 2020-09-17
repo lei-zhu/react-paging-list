@@ -60,6 +60,10 @@ const PagingList: React.FC<IPagingListProps> = (props: IPagingListProps) => {
       }
     }
 
+    // console.log(`pageNumber: ${pageNumber}`);
+    // console.log(`listRefreshing: ${listRefreshing}`);
+    // console.log(`totalPages: ${totalPages}`);
+
     // setPagedResult(null);
     // setDataListPerPage(null);
 
@@ -166,8 +170,11 @@ const PagingList: React.FC<IPagingListProps> = (props: IPagingListProps) => {
     }
 
     if (pageListWrap && pullDownRefereshStatus && dataLoading === false) {
-      pullDownRefereshStatus.children[0].innerHTML = '刷新中...';
-      setListRefreshing(true);
+      const statusText = pullDownRefereshStatus.children[0].innerHTML;
+      if (statusText === '松开立即刷新') {
+        pullDownRefereshStatus.children[0].innerHTML = '刷新中...';
+        setListRefreshing(true);
+      }
     }
   };
 
@@ -208,7 +215,7 @@ const PagingList: React.FC<IPagingListProps> = (props: IPagingListProps) => {
 
   // 初始加载，请求第一页数据
   useEffect(() => {
-    console.log('1、初始加载，请求第一页数据');
+    // console.log('1、初始加载，请求第一页数据');
     loadNextPageData(pageNum);
   }, []);
 
@@ -220,7 +227,7 @@ const PagingList: React.FC<IPagingListProps> = (props: IPagingListProps) => {
     }
 
     if (enableScrollingAutoLoad === true && dataLoading === false) {
-      console.log('2、容器的 scroll 滚动事件（订阅）');
+      // console.log('2、容器的 scroll 滚动事件（订阅）');
       if (pageListWrap) {
         pageListWrap.addEventListener('scroll', pageListWrapScroll);
       }
@@ -228,7 +235,7 @@ const PagingList: React.FC<IPagingListProps> = (props: IPagingListProps) => {
 
     return () => {
       if (enableScrollingAutoLoad === true && dataLoading === false) {
-        console.log('2、容器的 scroll 滚动事件（取消）');
+        // console.log('2、容器的 scroll 滚动事件（取消）');
         if (pageListWrap) {
           pageListWrap.removeEventListener('scroll', pageListWrapScroll);
         }
@@ -244,7 +251,7 @@ const PagingList: React.FC<IPagingListProps> = (props: IPagingListProps) => {
     }
 
     if (enablePullDownToRefresh === true) {
-      console.log('3、容器的 touchstart、touchmove 及 touchend 事件（订阅）');
+      // console.log('3、容器的 touchstart、touchmove 及 touchend 事件（订阅）');
       if (pageListWrap) {
         pageListWrap.addEventListener('touchstart', pageListWrapTouchStart);
         pageListWrap.addEventListener('touchmove', pageListWrapTouchMove);
@@ -254,7 +261,7 @@ const PagingList: React.FC<IPagingListProps> = (props: IPagingListProps) => {
 
     return () => {
       if (enablePullDownToRefresh === true) {
-        console.log('3、容器的 touchstart、touchmove 及 touchend 事件（取消）');
+        // console.log('3、容器的 touchstart、touchmove 及 touchend 事件（取消）');
         if (pageListWrap) {
           pageListWrap.removeEventListener('touchstart', pageListWrapTouchStart);
           pageListWrap.removeEventListener('touchmove', pageListWrapTouchMove);
@@ -267,7 +274,7 @@ const PagingList: React.FC<IPagingListProps> = (props: IPagingListProps) => {
   // 执行列表下拉刷新操作
   useLayoutEffect(() => {
     if (listRefreshing === true) {
-      console.log('4、执行列表下拉刷新操作');
+      // console.log('4、执行列表下拉刷新操作');
       loadNextPageData(1);
     }
   }, [listRefreshing]);
@@ -276,7 +283,7 @@ const PagingList: React.FC<IPagingListProps> = (props: IPagingListProps) => {
   useLayoutEffect(() => {
     if ((dataLoading === false || (listRefreshing === true && listRefreshingSuccess === true))
       && pagedResult) {
-      console.log('5、处理数据请求返回的结果');
+      // console.log('5、处理数据请求返回的结果');
       setDataResult();
       setDataLoadingSuccess(true);
     }
@@ -287,7 +294,7 @@ const PagingList: React.FC<IPagingListProps> = (props: IPagingListProps) => {
     if (listRefreshing === true
       && listRefreshingSuccess === false
       && listRefreshingCallbackSuccess === true) {
-      console.log('6、重置下拉刷新的状态');
+      // console.log('6、重置下拉刷新的状态');
       setListRefreshing(false);
       setListRefreshingCallbackSuccess(false);
     }
