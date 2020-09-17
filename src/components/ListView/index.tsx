@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { PureComponent } from 'react';
 import './style.less';
 
@@ -13,9 +14,12 @@ export interface IListViewProps<T> {
   layoutType: string; // 布局类型，可选值: ROW, GRID
   pageNumber: number; // 当前页码
   pageSize: number; // 每页数量
-  dataLoading: boolean; // 数据加载中
+  dataLoadingSuccess: boolean; // 数据加载是否成功
+  dataLoadingSuccessCallback: Function; // 数据加载成功后的回调函数
   dataListPerPage: Array<T>; // 每页数据集
   totalCount: number; // 总记录数
+  listRefreshingSuccess: boolean; // 刷新列表是否成功
+  listRefreshingSuccessCallback: Function; // 列表刷新成功后的回调函数
   options: IListViewOptions;
   renderItem: Function; // 渲染每一项的回调函数
 }
@@ -38,30 +42,56 @@ class ListView<T> extends PureComponent<IListViewProps<T>, IListViewState<T>> {
   static getDerivedStateFromProps(props: any, state: any) {
     const {
       pageNumber, pageSize,
-      dataLoading, dataListPerPage,
-      totalCount, // 总记录数
+      dataLoadingSuccess,
+      dataListPerPage, totalCount,
+      listRefreshingSuccess,
     } = props;
 
-    if (dataLoading === false
-      && (dataListPerPage && dataListPerPage.length === 0)
-      && totalCount === 0) {
+    const { dataList } = state;
+
+    // 计算总页数
+    const totalPages = Math.floor((totalCount % pageSize === 0)
+      ? (totalCount / pageSize)
+      : (totalCount / pageSize + 1));
+
+    // console.log('----------------------------------------------');
+    // console.log(`pageNumber: ${pageNumber}`);
+    // console.log(`pageSize: ${pageSize}`);
+    // console.log(`dataLoadingSuccess: ${dataLoadingSuccess}`);
+    // console.log(`dataListPerPage: ${dataListPerPage}`);
+    // console.log(`totalCount: ${totalCount}`);
+    // console.log(`listRefreshingSuccess: ${listRefreshingSuccess}`);
+    // console.log(`dataList: ${dataList}`);
+    // console.log(`totalPages: ${totalPages}`);
+    // console.log('----------------------------------------------');
+
+    const dataListPerPageEmpty = dataListPerPage === null || dataListPerPage.length === 0;
+
+    if (listRefreshingSuccess === true
+      && dataListPerPageEmpty === false
+      && totalCount > 0
+      && totalPages > 0) {
+      return {
+        dataList: dataListPerPage,
+        totalPages,
+      };
+    }
+
+    if (dataLoadingSuccess === true
+      && dataListPerPageEmpty === true
+      && totalCount === 0
+      && totalPages === 0) {
       return {
         totalPages: 0,
       };
     }
 
-    if (dataLoading === false
-      && (dataListPerPage && dataListPerPage.length > 0)
-      && totalCount > 0) {
-      const { dataList } = state;
-
+    if (dataLoadingSuccess === true
+      && dataListPerPageEmpty === false
+      && totalCount > 0
+      && totalPages > 0) {
       const loadedCount = dataList.length; // 已加载的记录数
       const afterLoadCount = pageNumber * pageSize; // 本次加载后的记录数
-
-      // 总页数
-      const totalPages = Math.floor((totalCount % pageSize === 0)
-        ? (totalCount / pageSize)
-        : (totalCount / pageSize + 1));
 
       if (loadedCount < afterLoadCount && loadedCount < totalCount) {
         const newDataList = dataList.concat(dataListPerPage);
@@ -77,6 +107,24 @@ class ListView<T> extends PureComponent<IListViewProps<T>, IListViewState<T>> {
     }
 
     return null;
+  }
+
+  componentDidUpdate = () => {
+    const { dataLoadingSuccess, dataLoadingSuccessCallback } = this.props;
+    if (dataLoadingSuccess === true) {
+      const { dataList, totalPages } = this.state;
+      console.log(`dataLoadingSuccess - dataList: ${dataList}`);
+      console.log(`dataLoadingSuccess - totalPages: ${totalPages}`);
+      dataLoadingSuccessCallback();
+    }
+
+    const { listRefreshingSuccess, listRefreshingSuccessCallback } = this.props;
+    if (listRefreshingSuccess === true) {
+      const { dataList, totalPages } = this.state;
+      console.log(`listRefreshingSuccess - dataList: ${dataList}`);
+      console.log(`listRefreshingSuccess - totalPages: ${totalPages}`);
+      listRefreshingSuccessCallback();
+    }
   }
 
   renderFirstLoading = () => {
@@ -105,7 +153,7 @@ class ListView<T> extends PureComponent<IListViewProps<T>, IListViewState<T>> {
 
   render() {
     const { totalPages, dataList } = this.state;
-    const { layoutType, dataLoading, renderItem } = this.props;
+    const { layoutType, renderItem } = this.props;
 
     if (totalPages === -1) {
       return (
@@ -115,7 +163,7 @@ class ListView<T> extends PureComponent<IListViewProps<T>, IListViewState<T>> {
       );
     }
 
-    if (totalPages === 0 && dataLoading === false) {
+    if (totalPages === 0 && dataList.length === 0) {
       return (
         <div className="rpl_list_view_2">
           {this.renderListNothing()}
