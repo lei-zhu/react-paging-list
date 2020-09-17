@@ -112,17 +112,17 @@ class ListView<T> extends PureComponent<IListViewProps<T>, IListViewState<T>> {
   componentDidUpdate = () => {
     const { dataLoadingSuccess, dataLoadingSuccessCallback } = this.props;
     if (dataLoadingSuccess === true) {
-      const { dataList, totalPages } = this.state;
-      console.log(`dataLoadingSuccess - dataList: ${dataList}`);
-      console.log(`dataLoadingSuccess - totalPages: ${totalPages}`);
+      // const { dataList, totalPages } = this.state;
+      // console.log(`dataLoadingSuccess - dataList: ${dataList}`);
+      // console.log(`dataLoadingSuccess - totalPages: ${totalPages}`);
       dataLoadingSuccessCallback();
     }
 
     const { listRefreshingSuccess, listRefreshingSuccessCallback } = this.props;
     if (listRefreshingSuccess === true) {
-      const { dataList, totalPages } = this.state;
-      console.log(`listRefreshingSuccess - dataList: ${dataList}`);
-      console.log(`listRefreshingSuccess - totalPages: ${totalPages}`);
+      // const { dataList, totalPages } = this.state;
+      // console.log(`listRefreshingSuccess - dataList: ${dataList}`);
+      // console.log(`listRefreshingSuccess - totalPages: ${totalPages}`);
       listRefreshingSuccessCallback();
     }
   }
@@ -153,7 +153,9 @@ class ListView<T> extends PureComponent<IListViewProps<T>, IListViewState<T>> {
 
   render() {
     const { totalPages, dataList } = this.state;
-    const { layoutType, renderItem } = this.props;
+    const {
+      layoutType, pageNumber, pageSize, totalCount, renderItem,
+    } = this.props;
 
     if (totalPages === -1) {
       return (
@@ -172,10 +174,35 @@ class ListView<T> extends PureComponent<IListViewProps<T>, IListViewState<T>> {
     }
 
     if (layoutType === 'GRID') {
+      let supplementaryElement;
+      if (!((pageSize % 2) === 0)) {
+        supplementaryElement = (<div className="list_item">&nbsp;</div>);
+      }
+
+      // console.log(`pageNumber: ${pageNumber}`);
+      // console.log(`pageNumber: ${totalPages}`);
+      // console.log(`totalCount: ${totalCount}`);
+
+      const twoPageCount = pageSize * 2;
+      if (pageNumber > 0
+        && pageNumber < totalPages
+        && pageNumber % 2 === 0
+        && twoPageCount % 2 === 0) {
+        supplementaryElement = undefined;
+      }
+
+      if (pageNumber > 0
+        && pageNumber === totalPages
+        && (totalCount % 2) === 0) {
+        supplementaryElement = undefined;
+      }
+
+      // console.log(`supplementaryElement: ${supplementaryElement}`);
       const content = dataList.map((item: T) => renderItem(item));
       return (
         <div className="rpl_list_view grid_layout">
           {content}
+          {supplementaryElement}
         </div>
       );
     }
