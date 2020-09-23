@@ -69,7 +69,6 @@ const PagingList: React.FC<IPagingListProps> = (props: IPagingListProps) => {
 
     setDataLoading(true);
     const result = await requestData({ pageSize, pageNumber });
-    console.log(result);
     setPagedResult(result);
     setPageNum(pageNumber);
     setDataLoading(false);

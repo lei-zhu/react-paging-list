@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 /* eslint-disable max-len */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
@@ -58,11 +59,20 @@ export default class App extends PureComponent {
 
     const url = `${API_ADDRESS}?key=${key}&catalog_id=${catalog_id}&pn=${pn}&rn=${rn}`;
     await axios({ withCredentials: false, method: 'get', url }).then((response: any) => {
-      const { result } = response.data;
+      const { result, reason } = response.data;
+
+      if (result === null && reason) {
+        alert(`获取数据失败，${reason}`);
+        return {
+          total: 0,
+          dataList: [],
+        };
+      }
+
       const { data, totalNum } = result;
       pagedResult = {
-        total: totalNum,
-        dataList: data,
+        total: totalNum || 0,
+        dataList: result === null ? [] : data,
       };
 
       return pagedResult;
