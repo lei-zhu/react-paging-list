@@ -20,7 +20,7 @@ export interface IPagedResult {
 export interface IPagingListProps {
   layoutType?: string; // 布局类型，可选值: ROW, GRID
   pageSize: number; // 每页数量
-  requestData: (params: IPageRequestParams) => IPagedResult; // 请求页面数据的回调函数
+  requestData: (params: IPageRequestParams) => Promise<IPagedResult>; // 请求页面数据的回调函数
   renderItem: (item: any) => React.ReactNode; // 渲染列表项的回调函数
   listViewOptions?: IListViewOptions;
   loadMoreOptions?: ILoadMoreOptions;
@@ -53,7 +53,7 @@ const PagingList: React.FC<IPagingListProps> = (props: IPagingListProps) => {
   const [listRefreshingSuccess, setListRefreshingSuccess] = useState(false);
   const [listRefreshingCallbackSuccess, setListRefreshingCallbackSuccess] = useState(false);
 
-  const loadNextPageData = (pageNumber: number) => {
+  const loadNextPageData = async (pageNumber: number) => {
     if (listRefreshing === false) {
       if (totalPages !== 0 && pageNum >= totalPages) {
         return;
@@ -68,16 +68,15 @@ const PagingList: React.FC<IPagingListProps> = (props: IPagingListProps) => {
     // setDataListPerPage(null);
 
     setDataLoading(true);
-    setTimeout(() => {
-      const result = requestData({ pageSize, pageNumber });
-      setPagedResult(result);
-      setPageNum(pageNumber);
-      setDataLoading(false);
+    const result = await requestData({ pageSize, pageNumber });
+    console.log(result);
+    setPagedResult(result);
+    setPageNum(pageNumber);
+    setDataLoading(false);
 
-      if (listRefreshing === true && pageNumber === 1) {
-        setListRefreshingSuccess(true);
-      }
-    }, 2000);
+    if (listRefreshing === true && pageNumber === 1) {
+      setListRefreshingSuccess(true);
+    }
   };
 
   const setDataResult = () => {
