@@ -112,17 +112,11 @@ class ListView<T> extends PureComponent<IListViewProps<T>, IListViewState<T>> {
   componentDidUpdate = () => {
     const { dataLoadingSuccess, dataLoadingSuccessCallback } = this.props;
     if (dataLoadingSuccess === true) {
-      // const { dataList, totalPages } = this.state;
-      // console.log(`dataLoadingSuccess - dataList: ${dataList}`);
-      // console.log(`dataLoadingSuccess - totalPages: ${totalPages}`);
       dataLoadingSuccessCallback();
     }
 
     const { listRefreshingSuccess, listRefreshingSuccessCallback } = this.props;
     if (listRefreshingSuccess === true) {
-      // const { dataList, totalPages } = this.state;
-      // console.log(`listRefreshingSuccess - dataList: ${dataList}`);
-      // console.log(`listRefreshingSuccess - totalPages: ${totalPages}`);
       listRefreshingSuccessCallback();
     }
   }
@@ -154,7 +148,7 @@ class ListView<T> extends PureComponent<IListViewProps<T>, IListViewState<T>> {
   render() {
     const { totalPages, dataList } = this.state;
     const {
-      layoutType, pageNumber, pageSize, totalCount, renderItem,
+      layoutType, pageNumber, pageSize, totalCount, dataListPerPage, renderItem,
     } = this.props;
 
     if (totalPages === -1) {
@@ -175,24 +169,25 @@ class ListView<T> extends PureComponent<IListViewProps<T>, IListViewState<T>> {
 
     if (layoutType === 'GRID') {
       let supplementaryElement;
-      if (!((pageSize % 2) === 0)) {
+
+      const temp1 = (pageSize % 2) === 0;
+      const temp2 = (dataListPerPage.length % 2) === 0;
+      if (!temp1 || !temp2) {
         supplementaryElement = (<div className="list_item">&nbsp;</div>);
       }
 
-      // console.log(`pageNumber: ${pageNumber}`);
-      // console.log(`pageNumber: ${totalPages}`);
-      // console.log(`totalCount: ${totalCount}`);
-
       const twoPageCount = pageSize * 2;
       if (pageNumber > 0
-        && pageNumber < totalPages
-        && pageNumber % 2 === 0
+        && pageNumber < totalPages // 第一页或第n页（不是最后一页）
+        && temp1 === true
+        && temp2 === true
         && twoPageCount % 2 === 0) {
         supplementaryElement = undefined;
       }
 
       if (pageNumber > 0
-        && pageNumber === totalPages
+        && pageNumber === totalPages // 最后一页
+        && temp2 === true
         && (totalCount % 2) === 0) {
         supplementaryElement = undefined;
       }
