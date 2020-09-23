@@ -313,7 +313,7 @@ const PagingList: React.FC<IPagingListProps> = (props: IPagingListProps) => {
   // console.log('----------------------------------------------');
 
   return (
-    <div className="paging_list" ref={pageListWrapRef}>
+    <div className="react_paging_list" ref={pageListWrapRef}>
       <div
         className="pull_down_refresh_status"
         ref={pullDownRefereshStatusRef}
